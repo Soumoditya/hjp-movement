@@ -26,15 +26,7 @@ export default function GallerySection() {
       </div>
 
       {/* Scrollable gallery */}
-      <div
-        className="overflow-x-auto pb-6"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        <style jsx>{`
-          div::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
+      <div className="overflow-x-auto pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-4 px-6 lg:px-10" style={{ width: 'max-content' }}>
           {images.map((img, i) => (
             <div

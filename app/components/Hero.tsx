@@ -29,9 +29,10 @@ export default function Hero() {
         />
       </div>
 
-      {/* Dark overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#070707] via-[#070707]/70 to-[#070707]/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-transparent to-[#070707]/40" />
+      {/* Dark overlays — strong enough to kill embedded poster text in bg image */}
+      <div className="absolute inset-0 bg-[#070707]/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#070707] via-[#070707]/80 to-[#070707]/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-[#070707]/20 to-[#070707]/50" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 pb-24 lg:pb-36 pt-32 w-full">

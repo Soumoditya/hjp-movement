@@ -11,6 +11,8 @@ import GauMataSection from './components/GauMataSection'
 import Petition from './components/Petition'
 import IdentitySection from './components/IdentitySection'
 import SwastikaSection from './components/SwastikaSection'
+import GallerySection from './components/GallerySection'
+import HeritageSection from './components/HeritageSection'
 import JoinSection from './components/JoinSection'
 import Footer from './components/Footer'
 
@@ -31,6 +33,8 @@ export default function Home() {
       <Petition />
       <IdentitySection />
       <SwastikaSection />
+      <GallerySection />
+      <HeritageSection />
       <JoinSection />
       <Footer />
     </main>
