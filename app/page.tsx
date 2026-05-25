@@ -4,22 +4,22 @@ const pillars = [
   {
     icon: Shield,
     title: 'Dharma',
-    text: 'Discipline, sacredness and continuity rooted in Hindu civilizational identity.',
+    text: 'Dharma is discipline, responsibility and continuity across generations.',
   },
   {
     icon: HeartHandshake,
     title: 'Seva',
-    text: 'Real action through temple seva, community work and responsibility.',
+    text: 'Seva begins with action, respect and responsibility toward society and sacred spaces.',
   },
   {
     icon: BookOpen,
     title: 'Sanskrit',
-    text: 'Preserving scriptural memory, philosophy and traditional knowledge.',
+    text: 'Sanskrit carries scriptures, philosophy and thousands of years of knowledge.',
   },
   {
     icon: Landmark,
     title: 'Temples',
-    text: 'Sacred places deserve dignity, preservation and disciplined conduct.',
+    text: 'Temples are living centers of culture, memory, devotion and discipline.',
   },
 ]
 
@@ -66,7 +66,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-7 text-base sm:text-lg text-[#ddd8cf] leading-8 max-w-2xl">
-              A modern Hindu cultural platform focused on Dharma, Sanskrit, temple dignity and preservation of sacred traditions.
+              HJP is focused on Dharma, Sanskrit, temple preservation, Gau Seva and continuity of Hindu traditions for future generations.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -101,7 +101,7 @@ export default function Home() {
                   </h2>
 
                   <p className="mt-6 text-[#ddd8cf] leading-8 max-w-md text-sm sm:text-base">
-                    Inspired by temples, Sanskrit manuscripts, saffron dhwaj and disciplined cultural identity.
+                    From temples and Sanskrit to Gau Mata and seva, every campaign is rooted in discipline and cultural continuity.
                   </p>
                 </div>
 
@@ -120,10 +120,10 @@ export default function Home() {
 
       <section className="border-t border-white/10 bg-white/[0.02] py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="max-w-3xl">
+          <div className="max-w-4xl">
             <p className="text-xs uppercase tracking-[0.35em] text-[#ddd8cf]">Core Pillars</p>
             <h2 className="mt-4 text-4xl sm:text-6xl font-black tracking-[-0.06em] leading-[0.94]">
-              Built with a modern editorial visual language.
+              Heritage survives when people protect it with discipline, knowledge and seva.
             </h2>
           </div>
 
@@ -153,7 +153,7 @@ export default function Home() {
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 sm:p-10">
               <div className="flex items-center gap-3 text-[#c97822]">
                 <Flame className="h-5 w-5" />
-                <span className="text-xs uppercase tracking-[0.3em]">Public Campaign</span>
+                <span className="text-xs uppercase tracking-[0.3em]">Gau Mata Campaign</span>
               </div>
 
               <h2 className="mt-5 text-4xl sm:text-5xl font-black tracking-[-0.06em] leading-[0.94]">
@@ -161,16 +161,16 @@ export default function Home() {
               </h2>
 
               <p className="mt-6 text-[#ddd8cf] leading-8 text-sm sm:text-base">
-                A cultural awareness initiative focused on seva, preservation and dignity of Gau Mata within Hindu tradition.
+                Hindu tradition has always placed Gau Mata within the center of seva, respect and sacred responsibility.
               </p>
 
               <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-6">
                 <div className="text-xs uppercase tracking-[0.28em] text-[#ddd8cf]">
-                  Community Support
+                  Current Focus
                 </div>
 
                 <p className="mt-4 text-sm sm:text-base leading-8 text-[#ddd8cf]">
-                  The movement is currently growing through Instagram awareness, poster campaigns and cultural outreach.
+                  Awareness campaigns, poster outreach and cultural initiatives focused on Gau Seva and preservation.
                 </p>
               </div>
 
@@ -199,7 +199,7 @@ export default function Home() {
                     </h3>
 
                     <p className="mt-4 text-sm leading-7 text-[#ddd8cf]">
-                      Awareness visuals built with a restrained editorial aesthetic.
+                      Cultural awareness visuals created for disciplined public outreach.
                     </p>
                   </div>
                 </div>
@@ -215,11 +215,11 @@ export default function Home() {
             <p className="text-xs uppercase tracking-[0.35em] text-[#ddd8cf]">Instagram</p>
 
             <h2 className="mt-5 text-4xl sm:text-6xl font-black tracking-[-0.06em] leading-[0.94] max-w-4xl">
-              Posters, campaigns and cultural awareness in one visual identity.
+              From Sanskrit awareness to temple seva, every campaign follows the same disciplined visual language.
             </h2>
 
             <p className="mt-6 max-w-3xl text-[#ddd8cf] leading-8 text-sm sm:text-base">
-              HJP visuals follow a consistent dark editorial style with restrained saffron accents and modern typography.
+              Follow HJP for cultural awareness posts, heritage-focused campaigns and modern Hindu visual storytelling.
             </p>
 
             <a href="https://www.instagram.com/hindujanta.party" className="mt-10 inline-flex items-center gap-2 rounded-full bg-[#f5f5f2] px-7 py-4 text-sm font-semibold text-black hover:scale-[1.02] transition">
