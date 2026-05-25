@@ -44,11 +44,7 @@ export default function Home() {
             <div className="mt-1 text-[11px] tracking-[0.28em] text-[#ddd8cf]">एक धर्म • एक राष्ट्र</div>
           </div>
 
-          <a
-            href="https://www.instagram.com/hindujanta.party"
-            target="_blank"
-            className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm backdrop-blur-md hover:bg-white/10 transition"
-          >
+          <a href="https://www.instagram.com/hindujanta.party" target="_blank" className="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm backdrop-blur-md hover:bg-white/10 transition">
             <Instagram className="h-4 w-4 text-[#c97822]" />
             @hindujanta.party
           </a>
@@ -70,21 +66,15 @@ export default function Home() {
             </h1>
 
             <p className="mt-7 text-base sm:text-lg text-[#ddd8cf] leading-8 max-w-2xl">
-              A premium modern Hindu cultural movement platform focused on Dharma, Sanskrit awareness, temple dignity, seva and preservation of sacred traditions.
+              A modern Hindu cultural platform focused on Dharma, Sanskrit, temple dignity and preservation of sacred traditions.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
-              <a
-                href="https://www.instagram.com/hindujanta.party"
-                className="inline-flex items-center gap-2 rounded-full bg-[#f5f5f2] px-6 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
-              >
+              <a href="https://www.instagram.com/hindujanta.party" className="inline-flex items-center gap-2 rounded-full bg-[#f5f5f2] px-6 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]">
                 Follow HJP <ArrowRight className="h-4 w-4" />
               </a>
 
-              <a
-                href="#campaign"
-                className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold hover:bg-white/10 transition"
-              >
+              <a href="#campaign" className="rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold hover:bg-white/10 transition">
                 Explore Campaigns
               </a>
             </div>
@@ -111,16 +101,13 @@ export default function Home() {
                   </h2>
 
                   <p className="mt-6 text-[#ddd8cf] leading-8 max-w-md text-sm sm:text-base">
-                    Modern editorial movement branding inspired by temples, Sanskrit manuscripts, saffron dhwaj and disciplined identity.
+                    Inspired by temples, Sanskrit manuscripts, saffron dhwaj and disciplined cultural identity.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   {['Sanskrit', 'Gau Mata', 'Temple Seva', 'Tradition'].map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-center text-xs tracking-[0.22em] hover:border-[#c97822]/40 transition"
-                    >
+                    <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-center text-xs tracking-[0.22em] hover:border-[#c97822]/40 transition">
                       {item}
                     </div>
                   ))}
@@ -136,7 +123,7 @@ export default function Home() {
           <div className="max-w-3xl">
             <p className="text-xs uppercase tracking-[0.35em] text-[#ddd8cf]">Core Pillars</p>
             <h2 className="mt-4 text-4xl sm:text-6xl font-black tracking-[-0.06em] leading-[0.94]">
-              Built like a modern movement, not a generic political template.
+              Built with a modern editorial visual language.
             </h2>
           </div>
 
@@ -174,19 +161,17 @@ export default function Home() {
               </h2>
 
               <p className="mt-6 text-[#ddd8cf] leading-8 text-sm sm:text-base">
-                A cultural awareness initiative focused on preservation, dignity, seva and protection of Gau Mata within Hindu tradition.
+                A cultural awareness initiative focused on seva, preservation and dignity of Gau Mata within Hindu tradition.
               </p>
 
-              <div className="mt-10 grid grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-                  <div className="text-4xl font-black tracking-[-0.06em]">21K+</div>
-                  <div className="mt-2 text-xs uppercase tracking-[0.24em] text-[#ddd8cf]">Supporters</div>
+              <div className="mt-10 rounded-2xl border border-white/10 bg-black/30 p-6">
+                <div className="text-xs uppercase tracking-[0.28em] text-[#ddd8cf]">
+                  Community Support
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
-                  <div className="text-4xl font-black tracking-[-0.06em]">108</div>
-                  <div className="mt-2 text-xs uppercase tracking-[0.24em] text-[#ddd8cf]">Community Groups</div>
-                </div>
+                <p className="mt-4 text-sm sm:text-base leading-8 text-[#ddd8cf]">
+                  The movement is currently growing through Instagram awareness, poster campaigns and cultural outreach.
+                </p>
               </div>
 
               <div className="mt-10 flex flex-wrap gap-4">
@@ -214,7 +199,7 @@ export default function Home() {
                     </h3>
 
                     <p className="mt-4 text-sm leading-7 text-[#ddd8cf]">
-                      Modern editorial visual campaign inspired by sacred traditions and disciplined identity.
+                      Awareness visuals built with a restrained editorial aesthetic.
                     </p>
                   </div>
                 </div>
@@ -227,14 +212,14 @@ export default function Home() {
       <section className="border-t border-white/10 py-24 bg-white/[0.02]">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-8 sm:p-12 lg:p-16">
-            <p className="text-xs uppercase tracking-[0.35em] text-[#ddd8cf]">Instagram Presence</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-[#ddd8cf]">Instagram</p>
 
             <h2 className="mt-5 text-4xl sm:text-6xl font-black tracking-[-0.06em] leading-[0.94] max-w-4xl">
-              Consistent branding across posts, stories and web.
+              Posters, campaigns and cultural awareness in one visual identity.
             </h2>
 
             <p className="mt-6 max-w-3xl text-[#ddd8cf] leading-8 text-sm sm:text-base">
-              The same editorial visual language continues across every HJP poster, awareness campaign and cultural initiative.
+              HJP visuals follow a consistent dark editorial style with restrained saffron accents and modern typography.
             </p>
 
             <a href="https://www.instagram.com/hindujanta.party" className="mt-10 inline-flex items-center gap-2 rounded-full bg-[#f5f5f2] px-7 py-4 text-sm font-semibold text-black hover:scale-[1.02] transition">
