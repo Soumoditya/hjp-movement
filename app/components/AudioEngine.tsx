@@ -3,9 +3,60 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 type AudioState = 'idle' | 'playing' | 'muted'
 
+function playShankh(ctx: AudioContext, shankhOut: GainNode) {
+  const now = ctx.currentTime
+  const dur = 4.2
+
+  // Envelope: breathe in, sustain, fade
+  shankhOut.gain.setValueAtTime(0, now)
+  shankhOut.gain.linearRampToValueAtTime(0.55, now + 0.45)
+  shankhOut.gain.setValueAtTime(0.55, now + dur - 1.2)
+  shankhOut.gain.exponentialRampToValueAtTime(0.001, now + dur)
+
+  // Harmonic stack — fundamental sweeps upward as you blow harder
+  const addTone = (startHz: number, endHz: number, g: number, type: OscillatorType = 'sine') => {
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.type = type
+    osc.frequency.setValueAtTime(startHz, now)
+    osc.frequency.exponentialRampToValueAtTime(endHz, now + dur * 0.7)
+    gain.gain.value = g
+    osc.connect(gain)
+    gain.connect(shankhOut)
+    osc.start(now)
+    osc.stop(now + dur + 0.1)
+  }
+
+  addTone(80, 185, 0.18)           // sub rumble
+  addTone(155, 370, 0.42)          // fundamental
+  addTone(310, 740, 0.22)          // 2nd harmonic
+  addTone(465, 1110, 0.10)         // 3rd
+  addTone(620, 1480, 0.05)         // 4th
+
+  // Breathy noise (air through the shell)
+  const len = Math.floor(ctx.sampleRate * dur)
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate)
+  const d = buf.getChannelData(0)
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1
+  const noise = ctx.createBufferSource()
+  noise.buffer = buf
+
+  const bpf = ctx.createBiquadFilter()
+  bpf.type = 'bandpass'
+  bpf.frequency.setValueAtTime(260, now)
+  bpf.frequency.exponentialRampToValueAtTime(700, now + dur * 0.65)
+  bpf.Q.value = 4.5
+
+  const ng = ctx.createGain()
+  ng.gain.value = 0.18
+  noise.connect(bpf); bpf.connect(ng); ng.connect(shankhOut)
+  noise.start(now)
+}
+
 export default function AudioEngine() {
   const [audioState, setAudioState] = useState<AudioState>('idle')
   const ctxRef = useRef<AudioContext | null>(null)
+  const droneRef = useRef<GainNode | null>(null)
   const masterRef = useRef<GainNode | null>(null)
 
   const ringBell = useCallback((ctx: AudioContext, dest: AudioNode, freq = 528, vol = 0.06) => {
@@ -15,11 +66,36 @@ export default function AudioEngine() {
     osc.frequency.value = freq
     g.gain.setValueAtTime(0, ctx.currentTime)
     g.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.012)
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3)
-    osc.connect(g)
-    g.connect(dest)
-    osc.start()
-    osc.stop(ctx.currentTime + 3.5)
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 3.2)
+    osc.connect(g); g.connect(dest)
+    osc.start(); osc.stop(ctx.currentTime + 3.5)
+  }, [])
+
+  const buildDrone = useCallback((ctx: AudioContext, droneGain: GainNode) => {
+    const addOsc = (freq: number, gain: number, detune = 0, type: OscillatorType = 'sawtooth') => {
+      const osc = ctx.createOscillator()
+      const g = ctx.createGain()
+      const lpf = ctx.createBiquadFilter()
+      lpf.type = 'lowpass'; lpf.frequency.value = 650; lpf.Q.value = 0.8
+      osc.type = type; osc.frequency.value = freq; osc.detune.value = detune
+      g.gain.value = gain
+      osc.connect(lpf); lpf.connect(g); g.connect(droneGain)
+      osc.start()
+    }
+    addOsc(65.4, 0.20, 0)
+    addOsc(65.4, 0.15, 9)
+    addOsc(98.0, 0.11, -5)
+    addOsc(130.8, 0.08, 6)
+    addOsc(130.8, 0.06, -8)
+    addOsc(196.0, 0.04, 0)
+    addOsc(261.6, 0.025, 3, 'sine')
+
+    // LFO tremolo
+    const lfo = ctx.createOscillator()
+    const lfoGain = ctx.createGain()
+    lfo.frequency.value = 0.22; lfoGain.gain.value = 0.012
+    lfo.connect(lfoGain); lfoGain.connect(droneGain.gain)
+    lfo.start()
   }, [])
 
   const startAudio = useCallback(() => {
@@ -28,66 +104,42 @@ export default function AudioEngine() {
     const ctx = new AudioContext()
     ctxRef.current = ctx
 
+    // Separate gain nodes: shankh and drone → master
     const master = ctx.createGain()
-    master.gain.value = 0
+    master.gain.value = 1
     master.connect(ctx.destination)
     masterRef.current = master
 
-    // Tamboura-style drone — C2 stack with harmonics
-    const addOsc = (freq: number, gain: number, detune = 0, type: OscillatorType = 'sawtooth') => {
-      const osc = ctx.createOscillator()
-      const g = ctx.createGain()
-      const lpf = ctx.createBiquadFilter()
-      lpf.type = 'lowpass'
-      lpf.frequency.value = 650
-      lpf.Q.value = 0.8
-      osc.type = type
-      osc.frequency.value = freq
-      osc.detune.value = detune
-      g.gain.value = gain
-      osc.connect(lpf)
-      lpf.connect(g)
-      g.connect(master)
-      osc.start()
-    }
+    const shankhGain = ctx.createGain()
+    shankhGain.connect(master)
+    playShankh(ctx, shankhGain)
 
-    addOsc(65.4, 0.20, 0)       // C2 root Sa
-    addOsc(65.4, 0.15, 9)       // C2 chorused
-    addOsc(98.0, 0.11, -5)      // G2 Pa (5th)
-    addOsc(130.8, 0.08, 6)      // C3 Sa (octave)
-    addOsc(130.8, 0.06, -8)     // C3 chorused
-    addOsc(196.0, 0.04, 0)      // G3
-    addOsc(261.6, 0.025, 3, 'sine') // C4 — smooth high note
+    const drone = ctx.createGain()
+    drone.gain.value = 0
+    drone.connect(master)
+    droneRef.current = drone
 
-    // Subtle LFO tremolo for organic feel
-    const lfo = ctx.createOscillator()
-    const lfoGain = ctx.createGain()
-    lfo.frequency.value = 0.22
-    lfoGain.gain.value = 0.012
-    lfo.connect(lfoGain)
-    lfoGain.connect(master.gain)
-    lfo.start()
+    // Build drone immediately but silent — start fading in after shankh
+    buildDrone(ctx, drone)
 
-    // Slow fade in
-    master.gain.setValueAtTime(0, ctx.currentTime)
-    master.gain.linearRampToValueAtTime(0.20, ctx.currentTime + 5)
+    // Drone fades in as shankh fades out
+    drone.gain.setValueAtTime(0, ctx.currentTime + 2.5)
+    drone.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 7)
 
-    // Opening bell
-    setTimeout(() => ringBell(ctx, master, 528, 0.07), 1000)
+    // Opening bell after shankh
+    setTimeout(() => ringBell(ctx, drone, 528, 0.07), 4600)
 
     setAudioState('playing')
-  }, [ringBell])
+  }, [buildDrone, ringBell])
 
   const toggle = () => {
-    if (audioState === 'idle') {
-      startAudio()
-      return
-    }
+    if (audioState === 'idle') { startAudio(); return }
+    if (!masterRef.current || !ctxRef.current) return
     if (audioState === 'playing') {
-      masterRef.current?.gain.linearRampToValueAtTime(0, ctxRef.current!.currentTime + 0.6)
+      masterRef.current.gain.linearRampToValueAtTime(0, ctxRef.current.currentTime + 0.5)
       setAudioState('muted')
     } else {
-      masterRef.current?.gain.linearRampToValueAtTime(0.20, ctxRef.current!.currentTime + 0.6)
+      masterRef.current.gain.linearRampToValueAtTime(1, ctxRef.current.currentTime + 0.5)
       setAudioState('playing')
     }
   }
@@ -96,13 +148,11 @@ export default function AudioEngine() {
   useEffect(() => {
     if (audioState !== 'playing') return
     const ctx = ctxRef.current!
-    const master = masterRef.current!
+    const drone = droneRef.current!
 
     const freqMap: Record<string, number> = {
-      manifesto: 528,
-      petition: 396,
-      sanskrit: 741,
-      'gau-mata': 432,
+      manifesto: 528, petition: 396, sanskrit: 741,
+      'gau-mata': 432, temples: 660, identity: 528,
     }
 
     const seen = new Set<string>()
@@ -112,18 +162,18 @@ export default function AudioEngine() {
           const id = entry.target.id
           if (!seen.has(id)) {
             seen.add(id)
-            ringBell(ctx, master, freqMap[id] ?? 880, 0.035)
+            setTimeout(() => ringBell(ctx, drone, freqMap[id] ?? 880, 0.035), 300)
           }
         }
       })
-    }, { threshold: 0.4 })
+    }, { threshold: 0.35 })
 
     document.querySelectorAll('section[id]').forEach(s => observer.observe(s))
     return () => observer.disconnect()
   }, [audioState, ringBell])
 
   const isPlaying = audioState === 'playing'
-  const barHeights = [3, 5, 4, 7, 4, 6, 3, 5, 4]
+  const bars = [3, 5, 4, 7, 4, 6, 3, 5, 4]
 
   return (
     <button
@@ -132,7 +182,7 @@ export default function AudioEngine() {
       aria-label="Toggle ambient sound"
     >
       <div className="flex items-end gap-[2.5px] h-4">
-        {barHeights.map((h, i) => (
+        {bars.map((h, i) => (
           <div
             key={i}
             className="w-[2px] bg-[#d4621a] rounded-full origin-bottom"
@@ -140,13 +190,13 @@ export default function AudioEngine() {
               height: isPlaying ? `${h * 2}px` : '3px',
               opacity: isPlaying ? 1 : 0.2,
               transition: 'height 0.3s ease, opacity 0.3s',
-              animation: isPlaying ? `soundBar ${0.6 + i * 0.07}s ease-in-out ${i * 70}ms infinite alternate` : 'none',
+              animation: isPlaying ? `soundBar ${0.55 + i * 0.08}s ease-in-out ${i * 65}ms infinite alternate` : 'none',
             }}
           />
         ))}
       </div>
       <span className="text-[9px] uppercase tracking-[0.3em] text-[#4a4540] group-hover:text-[#6b6560] transition-colors">
-        {audioState === 'idle' ? 'Sound' : isPlaying ? 'On' : 'Off'}
+        {audioState === 'idle' ? 'ॐ Sound' : isPlaying ? 'On' : 'Off'}
       </span>
     </button>
   )

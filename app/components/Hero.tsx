@@ -163,9 +163,9 @@ export default function Hero() {
             </a>
             <a
               href="#petition"
-              className="inline-flex items-center gap-3 border border-white/20 px-8 py-4 text-xs uppercase tracking-[0.25em] text-[#f5f1ea] hover:border-[#d4621a]/50 transition-colors duration-200"
+              className="inline-flex items-center gap-3 border-2 border-[#d4621a]/60 px-8 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-[#d4621a] hover:bg-[#d4621a]/10 hover:border-[#d4621a] transition-all duration-200"
             >
-              Sign — Gau Mata
+              Protect Gau Mata
             </a>
           </div>
         </div>
