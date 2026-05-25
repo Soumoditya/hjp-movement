@@ -34,15 +34,15 @@ export default function WhatIsHJP() {
           <div className="mt-8 saffron-line" />
 
           <p className="mt-8 text-base leading-8 text-[#d6d0c7]">
-            Rooted in identity. Focused on action.
+            No apologies. No footnotes.
           </p>
 
           <div className="mt-10 space-y-0 divide-y divide-white/[0.07]">
             {[
-              { label: 'Dharma', desc: 'The foundation. Not religion — way of life.' },
-              { label: 'Seva', desc: 'Action as devotion. Service as identity.' },
-              { label: 'Discipline', desc: 'The mark of civilizational seriousness.' },
-              { label: 'Tradition', desc: 'Memory held alive across generations.' },
+              { label: 'Dharma', desc: 'Not a religion. The order that holds everything. You live by it or you drift.' },
+              { label: 'Seva', desc: 'Not charity. Responsibility. Your hands are the proof of your belief.' },
+              { label: 'Discipline', desc: 'You cannot protect what you don\'t practice. Start there.' },
+              { label: 'Tradition', desc: 'What your ancestors chose not to abandon. Now it\'s your turn.' },
             ].map(({ label, desc }) => (
               <div key={label} className="flex items-center gap-6 py-5">
                 <div className="h-1 w-1 rounded-full bg-[#d4621a] flex-shrink-0" />

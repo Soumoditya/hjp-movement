@@ -37,8 +37,9 @@ export default function JoinSection() {
           </h2>
 
           <p className="text-base sm:text-lg leading-8 text-[#a09890] max-w-xl mx-auto mb-12">
-            Not built for followers. Built for those who carry memory as responsibility.
-            If you feel it — you already belong.
+            Not for spectators. For those who take Dharma seriously —
+            not as nostalgia, not as politics, but as a way of life.
+            If that is you, you already know.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -61,9 +62,9 @@ export default function JoinSection() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
               {[
                 { label: 'Dharma', devanagari: 'धर्म' },
-                { label: 'Memory', devanagari: 'स्मृति' },
+                { label: 'Shakti', devanagari: 'शक्ति' },
                 { label: 'Unity', devanagari: 'एकता' },
-                { label: 'Continuity', devanagari: 'सातत्य' },
+                { label: 'Satya', devanagari: 'सत्य' },
               ].map(({ label, devanagari }) => (
                 <div key={label} className="text-center">
                   <div className="font-devanagari text-2xl text-[#d4621a] mb-2">{devanagari}</div>
