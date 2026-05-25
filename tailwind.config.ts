@@ -9,15 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#0b0b0b',
-        foreground: '#f5f5f2',
-        saffron: '#c97822',
+        saffron: {
+          DEFAULT: '#d4621a',
+          light: '#e8721a',
+          dim: '#a34d14',
+        },
+        cream: {
+          DEFAULT: '#f5f1ea',
+          dim: '#d6d0c7',
+        },
+        void: '#070707',
+      },
+      fontFamily: {
+        display: ['var(--font-anton)', 'Impact', 'sans-serif'],
+        body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        devanagari: ['Noto Serif Devanagari', 'serif'],
       },
       boxShadow: {
-        glow: '0 0 60px rgba(201,120,34,0.18)',
+        saffron: '0 0 80px rgba(212, 98, 26, 0.2)',
+        'saffron-sm': '0 0 30px rgba(212, 98, 26, 0.15)',
       },
-      borderRadius: {
-        hero: '2rem',
+      animation: {
+        marquee: 'marquee 50s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
       },
     },
   },

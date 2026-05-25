@@ -2,13 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --saffron: #d4621a;
+  --saffron-light: #e8721a;
+  --cream: #f5f1ea;
+  --cream-dim: #d6d0c7;
+  --black: #070707;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  background: #0b0b0b;
-  color: #f5f5f2;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--black);
+  color: var(--cream);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-anton), 'Impact', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.font-devanagari {
+  font-family: 'Noto Serif Devanagari', serif;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 50s linear infinite;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0e0e0e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4621a;
+}
+
+.saffron-line {
+  height: 2px;
+  width: 48px;
+  background: #d4621a;
+}
+
+.input-dark {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 14px 20px;
+  font-size: 14px;
+  color: #f5f1ea;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-dark:focus {
+  border-color: rgba(212, 98, 26, 0.5);
+}
+
+.input-dark::placeholder {
+  color: #6b6560;
 }
