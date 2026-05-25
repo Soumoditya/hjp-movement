@@ -2,6 +2,10 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Anton, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import Preloader from './components/Preloader'
+import ScrollProgress from './components/ScrollProgress'
+import CustomCursor from './components/CustomCursor'
+import AudioEngine from './components/AudioEngine'
 
 const anton = Anton({
   weight: '400',
@@ -57,6 +61,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-[#070707] text-[#f5f1ea] antialiased overflow-x-hidden">
+        <Preloader />
+        <ScrollProgress />
+        <CustomCursor />
+        <AudioEngine />
         {children}
         <Analytics />
       </body>

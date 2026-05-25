@@ -29,9 +29,12 @@ function AnimatedCount({ value }: { value: number }) {
   )
 }
 
+interface Signer { name: string; city: string; ts: string }
+
 export default function Petition() {
   const [count, setCount] = useState<number | null>(null)
   const [kvReady, setKvReady] = useState(true)
+  const [recent, setRecent] = useState<Signer[]>([])
   const [form, setForm] = useState({ name: '', city: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -45,6 +48,7 @@ export default function Petition() {
         const data = await res.json()
         setCount(data.count)
         setKvReady(data.ok)
+        if (Array.isArray(data.recent)) setRecent(data.recent)
       } catch {
         setCount(0)
       }
@@ -297,6 +301,22 @@ export default function Petition() {
           </div>
         </div>
       </div>
+
+      {/* Live signers ticker */}
+      {recent.length > 0 && (
+        <div className="border-t border-white/[0.04] bg-[#050505] py-3 overflow-hidden">
+          <div className="flex gap-0 whitespace-nowrap" style={{ animation: 'marqueeSlow 35s linear infinite' }}>
+            {[...recent, ...recent].map((s, i) => (
+              <span key={i} className="inline-flex items-center gap-2.5 px-10">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d4621a] inline-block flex-shrink-0" style={{ boxShadow: '0 0 4px #d4621a' }} />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#4a4540]">
+                  {s.name} from {s.city} just signed
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   )
 }

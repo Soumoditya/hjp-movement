@@ -16,11 +16,22 @@ async function redis(command: string, ...args: string[]) {
 
 export async function GET() {
   try {
-    const result = await redis('GET', 'hjp:petition:count')
-    const count = parseInt(result ?? '0', 10) || 0
-    return Response.json({ count, ok: true })
+    const [countResult, rawSigners] = await Promise.all([
+      redis('GET', 'hjp:petition:count'),
+      redis('LRANGE', 'hjp:signatures', '0', '11'),
+    ])
+    const count = parseInt(countResult ?? '0', 10) || 0
+    const recent = (Array.isArray(rawSigners) ? rawSigners : [])
+      .map((s: string) => {
+        try {
+          const { name, city, ts } = JSON.parse(s)
+          return { name: (name as string).split(' ')[0], city, ts }
+        } catch { return null }
+      })
+      .filter(Boolean)
+    return Response.json({ count, ok: true, recent })
   } catch {
-    return Response.json({ count: 0, ok: false })
+    return Response.json({ count: 0, ok: false, recent: [] })
   }
 }
 
