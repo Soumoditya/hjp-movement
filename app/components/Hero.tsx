@@ -54,8 +54,8 @@ export default function Hero() {
             एक धर्म • एक राष्ट्र
           </p>
           <p className="mt-3 max-w-2xl text-sm sm:text-base leading-7 text-[#a09890]">
-            A Hindu civilizational movement rooted in memory, not politics. In Dharma, not power.
-            In continuity, not campaigns.
+            Not a party. Not a protest. A refusal — to let what is sacred become a relic
+            while the people it belongs to look the other way.
           </p>
 
           <div className="mt-12 flex flex-wrap gap-4">

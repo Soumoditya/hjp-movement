@@ -20,7 +20,7 @@ export default function SanskritSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 py-24 lg:py-36 w-full">
         <div className="max-w-xl">
           <div className="text-[10px] uppercase tracking-[0.5em] text-[#d4621a] mb-6">
-            Sacred Memory
+            Sacred Language
           </div>
 
           <h2 className="font-display text-[clamp(3.5rem,9vw,7.5rem)] leading-[0.88] text-[#f5f1ea]">
@@ -34,7 +34,8 @@ export default function SanskritSection() {
           <div className="mt-8 saffron-line" />
 
           <p className="mt-8 text-base leading-8 text-[#d6d0c7]">
-            The language of our roots. Not a relic — a living vessel of 5,000 years of thought.
+            Not ancient history. The living root of how this civilization thinks,
+            prays, and knows itself. Still here. Still whole.
           </p>
 
           <div className="mt-10 space-y-6">
@@ -48,9 +49,9 @@ export default function SanskritSection() {
 
           <div className="mt-12 space-y-4">
             {[
-              { icon: '📜', label: 'Our scriptures carry Sanskrit' },
-              { icon: '💡', label: 'Our knowledge lives in Sanskrit' },
-              { icon: '🧬', label: 'Our identity breathes in Sanskrit' },
+              { icon: '📜', label: 'Every scripture — written in Sanskrit' },
+              { icon: '🔥', label: 'Every ritual — spoken in Sanskrit' },
+              { icon: '🧬', label: 'Every philosophy — born in Sanskrit' },
             ].map(({ icon, label }) => (
               <div key={label} className="flex items-center gap-4">
                 <span className="text-lg">{icon}</span>

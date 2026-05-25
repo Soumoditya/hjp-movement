@@ -30,20 +30,21 @@ export default function SwastikaSection() {
         <div className="mt-6 saffron-line" />
 
         <p className="mt-8 max-w-sm text-base leading-8 text-[#a09890]">
-          A timeless symbol of Hindu identity. Before it was stolen and defiled by history's
-          darkest chapter, it was ours — a sacred mark of auspiciousness, continuity, and Dharma.
+          It was ours for millennia before one century tried to erase that.
+          Sacred mark of auspiciousness, of Dharma, of all that is good.
+          One man's crime does not erase ten thousand years of meaning.
         </p>
 
         <p className="mt-6 max-w-sm text-base leading-8 text-[#a09890]">
-          We reclaim it with clarity and calm.
-          Not with aggression. With memory.
+          We reclaim it with truth — not with rage, not with apology.
+          With the certainty of those who know it was always ours.
         </p>
 
         <div className="mt-10 space-y-4">
           {[
             { label: 'Auspiciousness', desc: 'स्वस्तिक — that which brings good' },
             { label: 'Dharma', desc: 'The eternal cosmic order' },
-            { label: 'Continuity', desc: 'Unbroken across 5,000 years' },
+            { label: 'Sanatan', desc: 'Beginningless. Endless. Ours.' },
           ].map(({ label, desc }) => (
             <div key={label} className="flex items-start gap-4">
               <div className="h-[1px] w-6 bg-[#d4621a] mt-3 flex-shrink-0" />

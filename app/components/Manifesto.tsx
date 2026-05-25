@@ -79,13 +79,13 @@ export default function Manifesto() {
                 HJP is not a political party.
               </p>
               <p>
-                It is a movement of memory — for those who know that Dharma is not ideology,
-                Sanskrit is not a dead language, and temples are not tourist sites.
+                It is a refusal — for those who know that Dharma is not ideology,
+                Sanskrit is not a dead language, and temples are not heritage sites
+                to be managed by people who don't believe in them.
               </p>
               <p>
-                We exist because the thread between generations is fraying.
-                Because young Hindus grow up disconnected from what their ancestors built.
-                Because silence is itself a form of destruction.
+                We exist because young Hindus are growing up with no thread back to what
+                their ancestors built and protected. And nobody finds that alarming enough.
               </p>
             </div>
 
@@ -100,11 +100,12 @@ export default function Manifesto() {
 
             <div className="space-y-6 text-base sm:text-lg leading-8">
               <p>
-                We do not promise elections. We promise memory.
-                We do not offer slogans. We offer continuity.
+                There are enough people fighting for power.
+                We are here for something they stopped thinking about decades ago.
               </p>
               <p>
-                Heritage survives only when people refuse to let it disappear.
+                Nobody outside this civilization will protect it.
+                That is not a complaint. It is a fact that demands a response.
               </p>
             </div>
 
