@@ -32,8 +32,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://hjp-movement.vercel.app/images/og-preview.png',
-        width: 1254,
-        height: 1254,
+        width: 1729,
+        height: 910,
         alt: 'HJP — Dharma Above Politics',
       },
     ],
