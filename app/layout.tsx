@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Anton, Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 
 const anton = Anton({
   weight: '400',
@@ -36,7 +37,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#070707] text-[#f5f1ea] antialiased overflow-x-hidden">{children}</body>
+      <body className="bg-[#070707] text-[#f5f1ea] antialiased overflow-x-hidden">
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
