@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     siteName: 'Hindu Janta Party — HJP',
     images: [
       {
-        url: '/images/dharma-above-politics.png',
-        width: 1200,
-        height: 630,
+        url: 'https://hjp-movement.vercel.app/images/og-preview.png',
+        width: 1254,
+        height: 1254,
         alt: 'HJP — Dharma Above Politics',
       },
     ],
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: 'HJP — Dharma Above Politics',
     description:
       'Not a party. Not a protest. A Hindu civilizational movement rooted in Dharma, Sanskrit, Gau Seva, and sacred continuity.',
-    images: ['/images/dharma-above-politics.png'],
+    images: ['https://hjp-movement.vercel.app/images/og-preview.png'],
   },
 }
 
