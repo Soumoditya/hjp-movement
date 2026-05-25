@@ -17,14 +17,33 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'HJP — Hindu Janta Party | Dharma. Memory. Continuity.',
+  metadataBase: new URL('https://hjp-movement.vercel.app'),
+  title: 'HJP — Hindu Janta Party | Dharma Above Politics',
   description:
-    'HJP is a Hindu civilizational and cultural movement rooted in Dharma, sacred continuity, Sanskrit, temple preservation, and Gau Seva.',
-  keywords: ['Hindu', 'Dharma', 'HJP', 'Hindu Janta Party', 'Sanskrit', 'Gau Mata', 'Hindu movement'],
+    'HJP is a Hindu civilizational and cultural movement rooted in Dharma, Sanskrit, temple preservation, and Gau Seva. Not a party. Not a protest. A refusal.',
+  keywords: ['Hindu', 'Dharma', 'HJP', 'Hindu Janta Party', 'Sanskrit', 'Gau Mata', 'Hindu movement', 'Sanatan Dharma'],
   openGraph: {
-    title: 'HJP — Hindu Janta Party',
-    description: 'Dharma above politics. A Hindu civilizational movement.',
-    images: ['/images/hjp-flag-logo.png'],
+    type: 'website',
+    url: 'https://hjp-movement.vercel.app',
+    title: 'HJP — Dharma Above Politics',
+    description:
+      'Not a party. Not a protest. A Hindu civilizational movement rooted in Dharma, Sanskrit, Gau Seva, and sacred continuity. Sign the Gau Mata petition.',
+    siteName: 'Hindu Janta Party — HJP',
+    images: [
+      {
+        url: '/images/dharma-above-politics.png',
+        width: 1200,
+        height: 630,
+        alt: 'HJP — Dharma Above Politics',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HJP — Dharma Above Politics',
+    description:
+      'Not a party. Not a protest. A Hindu civilizational movement rooted in Dharma, Sanskrit, Gau Seva, and sacred continuity.',
+    images: ['/images/dharma-above-politics.png'],
   },
 }
 
