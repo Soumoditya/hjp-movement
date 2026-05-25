@@ -2,66 +2,93 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-function Counter({ target }: { target: number }) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
-  const started = useRef(false)
+function AnimatedCount({ value }: { value: number }) {
+  const [display, setDisplay] = useState(value)
+  const prev = useRef(value)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    if (value === prev.current) return
+    const from = prev.current
+    const to = value
+    prev.current = value
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true
-          const start = Math.floor(target * 0.87)
-          const duration = 2800
-          const startTime = performance.now()
+    const duration = 900
+    const start = performance.now()
 
-          const update = (now: number) => {
-            const elapsed = now - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            const current = Math.floor(start + (target - start) * eased)
-            setCount(current)
-            if (progress < 1) requestAnimationFrame(update)
-          }
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1)
+      const ease = 1 - Math.pow(1 - t, 3)
+      setDisplay(Math.round(from + (to - from) * ease))
+      if (t < 1) requestAnimationFrame(tick)
+    }
 
-          requestAnimationFrame(update)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [target])
+    requestAnimationFrame(tick)
+  }, [value])
 
   return (
-    <div ref={ref} className="font-display text-[clamp(3rem,8vw,6rem)] text-[#d4621a] leading-none tabular-nums">
-      {count.toLocaleString('en-IN')}
-    </div>
+    <span className="font-display text-[clamp(2.8rem,7vw,5.5rem)] text-[#d4621a] leading-none tabular-nums">
+      {display.toLocaleString('en-IN')}
+    </span>
   )
 }
 
 export default function Petition() {
+  const [count, setCount] = useState<number | null>(null)
+  const [kvReady, setKvReady] = useState(true)
   const [form, setForm] = useState({ name: '', city: '', phone: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Fetch real count on mount + every 30s for live feel
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch('/api/petition')
+        const data = await res.json()
+        setCount(data.count)
+        setKvReady(data.ok)
+      } catch {
+        setCount(0)
+      }
+    }
+    fetchCount()
+    const id = setInterval(fetchCount, 30_000)
+    return () => clearInterval(id)
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name.trim() || !form.city.trim()) return
     setLoading(true)
-    setTimeout(() => {
+    setError('')
+
+    try {
+      const res = await fetch('/api/petition', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      setCount(data.count)
       setSubmitted(true)
+    } catch {
+      setError('Network error. Please try again.')
+    } finally {
       setLoading(false)
-    }, 1200)
+    }
   }
 
   return (
     <section id="petition" className="border-t border-white/[0.06] bg-[#0a0a0a]">
+
       {/* Header */}
       <div className="border-b border-white/[0.06] py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
@@ -70,97 +97,111 @@ export default function Petition() {
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-end">
             <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] leading-[0.9] text-[#f5f1ea]">
-              GAU MATA —
-              <br />
-              OUR NATIONAL
-              <br />
+              GAU MATA —<br />OUR NATIONAL<br />
               <span className="text-[#d4621a]">MOTHER</span>
             </h2>
             <p className="text-base leading-8 text-[#a09890] max-w-lg">
               We demand the recognition of Gau Mata as the National Animal of India —
               deserving of legal protection, cultural honor, and civilizational reverence.
-              This is not a political statement. It is a dharmic responsibility.
+              Not a political statement. A dharmic responsibility.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Counter section */}
-      <div className="border-b border-white/[0.06] py-12 lg:py-16 bg-gradient-to-b from-[#0e0e0e] to-[#0a0a0a]">
+      {/* Live counter */}
+      <div className="border-b border-white/[0.06] py-12 lg:py-16 bg-[#0e0e0e]">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/[0.07]">
-            <div className="lg:px-8 first:lg:pl-0">
-              <Counter target={84312} />
-              <div className="mt-3 text-xs uppercase tracking-[0.35em] text-[#6b6560]">Supporters</div>
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-10">
+            <div>
+              {count === null ? (
+                <div className="font-display text-[clamp(2.8rem,7vw,5.5rem)] text-[#d4621a] leading-none opacity-30">
+                  —
+                </div>
+              ) : (
+                <AnimatedCount value={count} />
+              )}
+              <div className="mt-3 text-[10px] uppercase tracking-[0.4em] text-[#6b6560]">
+                Real signatures
+              </div>
             </div>
-            <div className="lg:px-8">
-              <div className="font-display text-[clamp(3rem,8vw,6rem)] text-[#f5f1ea] leading-none">28</div>
-              <div className="mt-3 text-xs uppercase tracking-[0.35em] text-[#6b6560]">States</div>
-            </div>
-            <div className="lg:px-8">
-              <div className="font-display text-[clamp(3rem,8vw,6rem)] text-[#f5f1ea] leading-none">4.2K</div>
-              <div className="mt-3 text-xs uppercase tracking-[0.35em] text-[#6b6560]">Today</div>
-            </div>
-            <div className="lg:px-8">
-              <div className="font-display text-[clamp(3rem,8vw,6rem)] text-[#d4621a] leading-none">1L</div>
-              <div className="mt-3 text-xs uppercase tracking-[0.35em] text-[#6b6560]">Target</div>
-            </div>
+
+            {count !== null && count > 0 && (
+              <div className="pb-3 text-sm text-[#a09890]">
+                {count.toLocaleString('en-IN')} people have signed.
+                Add your name below.
+              </div>
+            )}
+
+            {count === 0 && !kvReady && (
+              <p className="pb-3 text-xs text-[#6b6560] max-w-sm">
+                Petition counter initialising. If you're the site owner, connect a{' '}
+                <span className="text-[#d4621a]">Vercel KV store</span> in your project
+                dashboard to enable live tracking.
+              </p>
+            )}
           </div>
 
-          {/* Progress bar */}
-          <div className="mt-10">
-            <div className="flex justify-between text-xs text-[#6b6560] mb-3 uppercase tracking-widest">
-              <span>0</span>
-              <span>84% Complete</span>
-              <span>1,00,000</span>
+          {count !== null && count > 0 && (
+            <div className="mt-6">
+              <div className="flex justify-between text-[10px] text-[#4a4540] mb-2 uppercase tracking-widest">
+                <span>0</span>
+                <span>{count.toLocaleString('en-IN')} signed</span>
+              </div>
+              <div className="h-[2px] bg-white/[0.06] relative overflow-hidden">
+                <div
+                  className="absolute left-0 top-0 h-full bg-[#d4621a] transition-all duration-1000"
+                  style={{ width: `${Math.min((count / 100000) * 100, 100)}%` }}
+                />
+              </div>
+              <div className="mt-2 text-[10px] text-[#3a3530] uppercase tracking-widest text-right">
+                Target: 1,00,000
+              </div>
             </div>
-            <div className="h-[3px] bg-white/[0.07] relative overflow-hidden">
-              <div
-                className="absolute left-0 top-0 h-full bg-[#d4621a] transition-all duration-2000"
-                style={{ width: '84%' }}
-              />
-              <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Form */}
+      {/* Form + demands */}
       <div className="py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <div className="grid lg:grid-cols-[1fr_1.2fr] gap-16 lg:gap-24">
-            {/* Left */}
-            <div>
-              <div className="font-display text-3xl sm:text-4xl text-[#f5f1ea] leading-tight mb-6">
-                ADD YOUR
-                <br />
-                <span className="text-[#d4621a]">NAME</span>
-              </div>
-              <p className="text-sm leading-7 text-[#6b6560] mb-8">
-                Every name matters. Every voice counted.
-                Stand with 84,000 Hindus who refuse to let Gau Mata's dignity go unrecognized.
-              </p>
 
-              <div className="space-y-4 text-sm text-[#a09890] divide-y divide-white/[0.06]">
-                <div className="pb-4">
-                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">We demand</div>
-                  <p>Constitutional recognition of Gau Mata as National Animal</p>
+            {/* Demands */}
+            <div>
+              <div className="font-display text-3xl sm:text-4xl text-[#f5f1ea] leading-tight mb-8">
+                WHAT WE<br />
+                <span className="text-[#d4621a]">DEMAND</span>
+              </div>
+
+              <div className="space-y-0 text-sm text-[#a09890] divide-y divide-white/[0.06]">
+                <div className="pb-5">
+                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">Recognition</div>
+                  <p>Constitutional recognition of Gau Mata as the National Animal of India</p>
                 </div>
-                <div className="py-4">
-                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">We stand for</div>
-                  <p>Strict enforcement against illegal slaughter across all states</p>
+                <div className="py-5">
+                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">Protection</div>
+                  <p>Strict legal enforcement against illegal slaughter across all states</p>
                 </div>
-                <div className="pt-4">
-                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">We believe</div>
+                <div className="py-5">
+                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">Reverence</div>
+                  <p>State-funded Gau Shalas and care infrastructure across India</p>
+                </div>
+                <div className="pt-5">
+                  <div className="text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">Belief</div>
                   <p>Gau Seva is Dharma — a civilizational duty, not a political demand</p>
                 </div>
               </div>
             </div>
 
-            {/* Right - Form */}
+            {/* Form */}
             <div>
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="font-display text-2xl text-[#f5f1ea] mb-6">
+                    ADD YOUR NAME
+                  </div>
+
                   <div>
                     <label className="block text-[10px] uppercase tracking-[0.4em] text-[#d4621a] mb-2">
                       Full Name *
@@ -202,24 +243,30 @@ export default function Petition() {
                     />
                   </div>
 
+                  {error && (
+                    <p className="text-xs text-red-400 py-2">{error}</p>
+                  )}
+
                   <div className="pt-2">
-                    <p className="text-xs text-[#4a4540] mb-6">
-                      By signing, you affirm this is a voluntary declaration of support for Gau Mata's protection and recognition. Your data will not be shared with any political party.
+                    <p className="text-xs text-[#4a4540] mb-6 leading-6">
+                      Voluntary declaration of support. Not affiliated with any political party.
+                      Your data will never be shared or sold.
                     </p>
 
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-[#d4621a] py-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#070707] hover:bg-[#e8721a] transition-colors duration-200 disabled:opacity-60"
+                      className="w-full bg-[#d4621a] py-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#070707] hover:bg-[#e8721a] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {loading ? 'Signing...' : 'Sign the Petition — Jai Gau Mata'}
+                      {loading ? 'Signing...' : 'Sign — Jai Gau Mata'}
                     </button>
 
-                    <div className="mt-4 flex gap-4 text-center">
+                    <div className="mt-4 flex gap-3">
                       <a
                         href="https://www.instagram.com/hindujanta.party"
                         target="_blank"
-                        className="flex-1 border border-white/10 py-3 text-xs uppercase tracking-[0.2em] text-[#a09890] hover:border-white/20 transition-colors"
+                        rel="noopener noreferrer"
+                        className="flex-1 border border-white/10 py-3 text-xs uppercase tracking-[0.2em] text-[#a09890] hover:border-white/20 transition-colors text-center"
                       >
                         Share on Instagram
                       </a>
@@ -229,7 +276,7 @@ export default function Petition() {
                           if (navigator.share) {
                             navigator.share({
                               title: 'Gau Mata Petition — HJP',
-                              text: 'I signed the HJP petition for Gau Mata\'s recognition as National Animal.',
+                              text: 'I signed the HJP petition for Gau Mata\'s recognition as National Animal. Join us.',
                               url: window.location.href,
                             })
                           }
@@ -242,23 +289,28 @@ export default function Petition() {
                   </div>
                 </form>
               ) : (
-                <div className="text-center py-16">
+                <div className="text-center py-12">
                   <div className="text-5xl mb-6">🙏</div>
                   <div className="font-display text-4xl text-[#d4621a] mb-4">JAI GAU MATA</div>
-                  <p className="text-base text-[#a09890] leading-8 mb-8">
+                  <p className="text-base text-[#a09890] leading-8 mb-2">
                     <strong className="text-[#f5f1ea]">{form.name}</strong> from {form.city} —
-                    your name stands with 84,000+ Hindus.
+                    your name is recorded.
                   </p>
+                  {count !== null && (
+                    <p className="text-sm text-[#6b6560] mb-8">
+                      You are signer #{count.toLocaleString('en-IN')}
+                    </p>
+                  )}
                   <div className="font-devanagari text-2xl text-[#d6d0c7]">
                     गावो विश्वस्य मातरः
                   </div>
                   <p className="text-xs text-[#6b6560] mt-3 tracking-widest">
                     Cows are the mothers of the world
                   </p>
-
                   <a
                     href="https://www.instagram.com/hindujanta.party"
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="mt-10 inline-block border border-[#d4621a]/50 px-8 py-4 text-xs uppercase tracking-[0.25em] text-[#d4621a] hover:bg-[#d4621a]/10 transition-colors"
                   >
                     Follow HJP @hindujanta.party
